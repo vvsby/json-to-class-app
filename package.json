@@ -28,7 +28,8 @@
     "highlight.js": "^9.15.6",
     "moment": "2.20.1",
     "rxjs": "6.3.0",
-    "zone.js": "0.8.26"
+    "zone.js": "0.8.26",
+    "ngx-highlightjs": "3.0.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.11.0",

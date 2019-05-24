@@ -39,6 +39,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
+import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 
 import typescript from 'highlight.js/lib/languages/typescript';
 import javascript from 'highlight.js/lib/languages/javascript';
@@ -92,7 +93,10 @@ export function hljsLanguages() {
     MatTooltipModule,
     MatStepperModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HighlightModule.forRoot({
+      languages: hljsLanguages
+    })
   ],
   providers: [
   ],
