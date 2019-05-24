@@ -1,0 +1,42 @@
+<div class="header">
+  <div>
+    <mat-form-field style="min-width: 80%;">
+      <input matInput type="text" [(ngModel)]="url">
+      <mat-hint align="start"><strong>Get from url</strong> </mat-hint>
+    </mat-form-field>
+    <button (click)="getFromUrl()" class="marginLeft20">Get from url
+    </button>
+    <br>
+    <mat-form-field style="min-width: 250px;">
+      <input matInput type="text" [(ngModel)]="firstClassName">
+      <mat-hint align="start"><strong>First Class Name</strong> </mat-hint>
+    </mat-form-field>
+    <mat-form-field style="min-width: 250px;" class="paddingLeft20">
+      <input matInput type="text" [(ngModel)]="templateForDuplicates">
+      <mat-hint align="start"><strong>Duplicate Names Template</strong> </mat-hint>
+    </mat-form-field>
+  </div>
+</div>
+<div class="bottomBox">
+  <div class="table">
+    <div class="codeBox">
+      <div class="headerBox">
+        <p>JSON for convert</p>
+      </div>
+      <div class="code">
+        <textarea [(ngModel)]="inputText" rows="40" cols="80"></textarea>
+      </div>
+    </div>
+    <div class="codeBox">
+      <div class="headerBox">
+        <p>Result</p>
+      </div>
+      <div class="code resultBox">
+        <code #code [highlight]="showResult" [languages]="typescript"></code>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top: 10px;">
+    <button (click)="getText()">Convert</button>
+  </div>
+</div>
