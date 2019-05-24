@@ -1,7 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import hljs from 'highlight.js';
 import typescript from 'highlight.js/lib/languages/typescript';
-import { HighlightResult } from 'ngx-highlightjs';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -22,7 +21,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   classArray: any[] = [];
   classNamesArray: string[] = [];
   showResult = '';
-  response: HighlightResult;
 
   constructor(
     public http: HttpClient
