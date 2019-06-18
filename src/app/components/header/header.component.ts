@@ -14,6 +14,13 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   codeElement: ElementRef;
 
   str = '';
+  tab = '  ';
+  tabArrays: TabForSelect[] = [
+    { text: '2 spaces', value: '  ' },
+    { text: '4 spaces', value: '    ' },
+    { text: 'tab', value: ' ' },
+    { text: 'none', value: '' }
+  ];
   firstClassName = 'FirstClass';
   templateForDuplicates = 'MustBeRenaimed';
   url: string;
@@ -23,12 +30,15 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   classNamesArray: string[] = [];
   showResult = '';
   response: HighlightResult;
+  arrayOfTypes: Row[];
+  arrayOfClasses: ClassField[];
 
   constructor(
     public http: HttpClient
   ) { }
 
   ngOnInit() {
+    this.arrayOfClasses = [];
   }
   ngAfterViewInit() {
     hljs.registerLanguage('typescript', typescript);
@@ -44,14 +54,22 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     if (parsed) {
       let str = '';
       this.initArrays();
-      this.createClass(parsed, this.checkClassName(this.firstClassName));
+      // this.createClass(this.getObjectFromArray(parsed), this.checkClassName(this.firstClassName));
+      this.createClassRow(this.getObjectFromArray(parsed), this.checkClassName(this.firstClassName));
       for (const key in this.classArray) {
         if (key) {
           str += this.classArray[key] + '\r\n';
         }
       }
-      this.showResult = str;
+
+      this.showResult = this.getOutputTexFromArray(this.arrayOfClasses); // str;
     }
+  }
+  updateText() {
+    this.showResult = this.getOutputTexFromArray(this.arrayOfClasses);
+  }
+  getObjectFromArray(obj) {
+    return Array.isArray(obj) ? this.getObjectFromArray(obj.shift()) : obj;
   }
   /**
    * Return input string with first big letter
@@ -88,7 +106,26 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       return this.goByFieldsForArray(obj);
     }
   }
-
+  /**
+  * Parse arrays
+  * @param obj input object for parsing
+  * @param parentObject input parent object for parsing (optional |used for parsing arrays)
+  */
+  goByFieldsForArray(obj) {
+    const typeOfFirstElement = this.goByFields(obj[0]);
+    if (typeOfFirstElement !== 'any') {
+      return typeOfFirstElement + '[]';
+    } else {
+      let typeForResponse = 'any';
+      obj.forEach(element => {
+        const typeOfNextElement = this.goByFields(element);
+        if (typeOfNextElement !== 'any') {
+          typeForResponse = typeOfNextElement;
+        }
+      });
+      return typeForResponse + '[]';
+    }
+  }
   /**
    * Parse objects
    * @param obj input object for parsing
@@ -111,10 +148,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 response += '  ' + key + ': ' + className + '[];\r\n';
                 this.createClass(obj[key][0], className, obj[key]);
               } else if (this.getType(obj[key][0]) === 'array') { /* переделать */
-                console.log(key);
-                console.log(obj[key]);
+                //  console.log(key);
+                // console.log(obj[key]);
                 const text = this.getTypeFinal(obj[key], key);
-                console.log(text)
+                //  console.log(text);
                 response += '  ' + key + ': ' + text + ';\r\n';
               } else {
                 response += '  ' + key + ': ' + this.goByFields(obj[key][0], obj[key]) + '[]' + ';\r\n';
@@ -135,13 +172,80 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
   }
+  /**
+   * Main function for parsing
+   * @param obj input object for parsing
+   * @param parentObject input parent object for parsing (optional |used for parsing arrays)
+   */
+  goByFieldsRows(obj, parentObject?) {
+    if (!Array.isArray(obj)) {
+      return this.goByFieldsForObjectRows(obj, parentObject);
+    } else {
+      return []; // this.goByFieldsForArrayRows(obj);
+    }
+  }
+  /**
+   * Parse objects
+   * @param obj input object for parsing
+   * @param parentObject input parent object for parsing (optional |used for parsing arrays)
+   */
+  goByFieldsForObjectRows(obj, parentObject?) {
+    const response: Row[] = [];
+    if (obj && typeof obj === 'object') {
+      for (const key in obj) {
+        if (key) {
+          const type = this.getType(obj[key]);
+          if (type === 'any' && parentObject) {
+            response.push({ name: key, type: this.findTypeInParent(parentObject, key) });
+            // response += '  ' + key + ': ' + this.findTypeInParent(parentObject, key) + ';\r\n';
+          } else {
+            if (type !== 'object' && type !== 'array') {
+              response.push({ name: key, type: type });
+              // response += '  ' + key + ': ' + type + ';\r\n';
+            } else if (type === 'array') {
+              if (this.getType(obj[key][0]) === 'object') {
+                const className = this.checkClassName(this.firstBigLetter(key) + 'Class');
+                response.push({ name: key, type: className + '[]' });
+                // response += '  ' + key + ': ' + className + '[];\r\n';
+                this.createClassRow(obj[key][0], className, obj[key]);
+              } else if (this.getType(obj[key][0]) === 'array') { /* переделать */
+                console.log(key);
+                console.log(obj[key]);
+                const text = this.getTypeFinalRow(obj[key], key);
+                console.log(text);
+                response.push({ name: key, type: text });
+                // response += '  ' + key + ': ' + text + ';\r\n';
+              } else {
+                response.push({ name: key, type: this.goByFields(obj[key][0], obj[key]) + '[]' });
+                // response += '  ' + key + ': ' + this.goByFields(obj[key][0], obj[key]) + '[]' + ';\r\n';
+              }
+            } else if (obj[key]) {
+              const className = this.checkClassName(this.firstBigLetter(key) + 'Class');
+              response.push({ name: key, type: className });
+              // response += '  ' + key + ': ' + className + ';\r\n';
+              this.createClassRow(obj[key], className, obj);
+            } else {
+              response.push({ name: key, type: 'any' });
+              // response += '  ' + key + ': any;\r\n';
+            }
+          }
+        }
+      }
+      return response;
+    } else {
+      console.log(obj);
+      return []; // obj ? typeof obj : 'any';
+    }
+
+  }
+
 
   /**
   * Parse arrays
   * @param obj input object for parsing
   * @param parentObject input parent object for parsing (optional |used for parsing arrays)
   */
-  goByFieldsForArray(obj) {
+  goByFieldsForArrayRows(obj) {
     const typeOfFirstElement = this.goByFields(obj[0]);
     if (typeOfFirstElement !== 'any') {
       return typeOfFirstElement + '[]';
@@ -167,12 +271,22 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     response += this.goByFields(obj, parent);
     response += '}';
     this.classArray[className] = response;
+    // this.arrayOfClasses.push(new ClassField({ name: className, arrayOfRows: this.goByFieldsRows(obj, parent) }));
+    return className;
+  }
+  /**
+   * Create new class for the class array
+   */
+  createClassRow(obj, name: string, parent?) {
+    const className = this.firstBigLetter(name);
+    this.arrayOfClasses.push(new ClassField({ name: className, arrayOfRows: this.goByFieldsRows(obj, parent) }));
     return className;
   }
   /**
    * Get JSON data from URL
    */
   getFromUrl() {
+    console.log(this.arrayOfClasses);
     if (this.url) {
       try {
         this.http.get(this.url).subscribe(response => {
@@ -201,6 +315,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.classArray = [];
     this.classNamesArray = [];
     this.otputText = [];
+    this.arrayOfClasses = [];
   }
   /**
    * Return type from other element in array
@@ -224,8 +339,82 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     if (Array.isArray(obj)) {
       return this.getTypeFinal(obj[0], name) + '[]';
     }
-    const string = this.createClass(obj, name + 'Class');
+    let string = 'any';
+    if (obj && typeof obj === 'object') {
+      string = this.createClass(obj, name + 'Class');
+    } else {
+      string = typeof obj;
+    }
     return string;
   }
+  getTypeFinalRow(obj, name) {
+    if (Array.isArray(obj)) {
+      return this.getTypeFinalRow(obj[0], name) + '[]';
+    }
+    let string = 'any';
+    if (obj && typeof obj === 'object') {
+      string = this.createClassRow(obj, name + 'Class');
+    } else {
+      string = typeof obj;
+    }
+    return string;
+  }
+  getOutputTexFromArray(obj: ClassField[]) {
+    let str = '';
+    obj.forEach(classRow => {
+      str += 'export interface I' + classRow.name + '{\r\n';
+      classRow.arrayOfRows.forEach(row => {
+        str += this.tab + row.name + ': ' + row.type + ';\r\n';
+      });
+      str += '}\r\n\r\n';
+      str += 'export class ' + classRow.name + ' implements I' + classRow.name + '{\r\n';
+      classRow.arrayOfRows.forEach(row => {
+        str += this.tab + row.name + ': ' + row.type + ';\r\n';
+      });
+      str += '\r\n' + this.tab + 'constructor(initObject: I' + classRow.name + ') {\r\n';
+      classRow.arrayOfRows.forEach(row => {
+        str += this.tab + this.tab + 'this.' + row.name + ' = initObject && initObject.' + row.name + ';\r\n';
+      });
+      str += this.tab + '}\r\n';
+      str += '}\r\n\r\n';
+    });
+    return str;
+  }
+  copyTextToClipboard() {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = this.showResult;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
 
+  }
+
+
+}
+
+class Row {
+  name: string;
+  type: string;
+  constructor(obj?: Row) {
+    this.name = obj.name || '';
+    this.type = obj.type || '';
+  }
+}
+class ClassField {
+  name: string;
+  arrayOfRows: Row[];
+  constructor(obj?: ClassField) {
+    this.name = obj.name || '';
+    this.arrayOfRows = obj.arrayOfRows || [];
+  }
+}
+class TabForSelect {
+  text: string;
+  value: string;
 }
