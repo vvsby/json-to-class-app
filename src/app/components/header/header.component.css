@@ -67,9 +67,9 @@ span {
 .headerBox {
     background-color: orange;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-content: center;
-    justify-content: center;
+    justify-content: space-between;
     height: 30px;
     font-size: 14px;
     font-weight: bold;
@@ -95,7 +95,7 @@ span {
 
 p {
     margin: 0px;
-    padding-top: 0px;
+    padding-top: 10px;
 }
 
 .resultBox {
@@ -105,4 +105,10 @@ p {
 .bottomBox {
     display: flex;
     flex-direction: column;
+}
+
+.toolbar {
+    padding-top: 6px;
+    width: 24px;
+    cursor: pointer;
 }

@@ -15,6 +15,12 @@
       <input matInput type="text" [(ngModel)]="templateForDuplicates">
       <mat-hint align="start"><strong>Duplicate Names Template</strong> </mat-hint>
     </mat-form-field>
+    <mat-form-field style="min-width: 250px;" class="paddingLeft20">
+      <mat-select placeholder="Tab:" [(ngModel)]="tab" (selectionChange)="updateText()">
+        <mat-option *ngFor="let tab of tabArrays" [value]="tab.value">
+          {{ tab.text }}</mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 </div>
 <div class="bottomBox">
@@ -30,13 +36,19 @@
     <div class="codeBox">
       <div class="headerBox">
         <p>Result</p>
+        <i class="material-icons toolbar" (click)="copyTextToClipboard()" placeholder="Copy result">
+          file_copy
+        </i>
       </div>
-      <div class="code resultBox">
-        <code #code [highlight]="showResult" [languages]="typescript"></code>
+      <div class="code resultBox" highlightChildren>
+        <code #code [highlight]="showResult" [languages]="['typescript']" id="code"></code>
       </div>
     </div>
   </div>
   <div style="margin-top: 10px;">
     <button (click)="getText()">Convert</button>
+    <button (click)="copyTextToClipboard()" class="marginLeft20">Copy result</button>
+  </div>
+  <div style="margin-top: 10px;">
   </div>
 </div>
