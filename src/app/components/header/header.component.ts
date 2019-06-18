@@ -39,6 +39,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.arrayOfClasses = [];
+    this.inputText = this.getFromLS();
   }
   ngAfterViewInit() {
     hljs.registerLanguage('typescript', typescript);
@@ -48,6 +49,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     let parsed;
     try {
       parsed = JSON.parse(this.inputText);
+      this.saveToLS(this.inputText);
     } catch (err) {
       alert(err);
     }
@@ -394,7 +396,12 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     document.body.removeChild(selBox);
 
   }
-
+  saveToLS(inputText) {
+    window.localStorage.setItem('jsonForConvert', inputText);
+  }
+  getFromLS() {
+    return window.localStorage.getItem('jsonForConvert') || '';
+  }
 
 }
 
