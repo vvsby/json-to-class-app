@@ -1,8 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import hljs from 'highlight.js';
-import typescript from 'highlight.js/lib/languages/typescript';
 import { HighlightResult } from 'ngx-highlightjs';
 import { HttpClient } from '@angular/common/http';
+import { ClassField, Row, TabForSelect } from '../../classes/classes';
 
 @Component({
   selector: 'app-header',
@@ -10,10 +9,8 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
-  @ViewChild('code')
-  codeElement: ElementRef;
+  @ViewChild('code') codeElement: ElementRef;
 
-  str = '';
   tab = '  ';
   tabArrays: TabForSelect[] = [
     { text: '2 spaces', value: '  ' },
@@ -30,7 +27,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   classNamesArray: string[] = [];
   showResult = '';
   response: HighlightResult;
-  arrayOfTypes: Row[];
   arrayOfClasses: ClassField[];
 
   constructor(
@@ -41,10 +37,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.arrayOfClasses = [];
     this.inputText = this.getFromLS();
   }
-  ngAfterViewInit() {
-    hljs.registerLanguage('typescript', typescript);
-    hljs.highlightBlock(this.codeElement.nativeElement);
-  }
+  ngAfterViewInit() { }
   getText() {
     let parsed;
     try {
@@ -54,15 +47,15 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       alert(err);
     }
     if (parsed) {
-      let str = '';
+      /* let str = ''; */
       this.initArrays();
       // this.createClass(this.getObjectFromArray(parsed), this.checkClassName(this.firstClassName));
       this.createClassRow(this.getObjectFromArray(parsed), this.checkClassName(this.firstClassName));
-      for (const key in this.classArray) {
+      /* for (const key in this.classArray) {
         if (key) {
           str += this.classArray[key] + '\r\n';
         }
-      }
+      } */
 
       this.showResult = this.getOutputTexFromArray(this.arrayOfClasses); // str;
     }
@@ -150,10 +143,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
                 response += '  ' + key + ': ' + className + '[];\r\n';
                 this.createClass(obj[key][0], className, obj[key]);
               } else if (this.getType(obj[key][0]) === 'array') { /* переделать */
-                //  console.log(key);
-                // console.log(obj[key]);
                 const text = this.getTypeFinal(obj[key], key);
-                //  console.log(text);
                 response += '  ' + key + ': ' + text + ';\r\n';
               } else {
                 response += '  ' + key + ': ' + this.goByFields(obj[key][0], obj[key]) + '[]' + ';\r\n';
@@ -235,8 +225,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       }
       return response;
     } else {
-      console.log(obj);
-      return []; // obj ? typeof obj : 'any';
+      return [];
     }
 
   }
@@ -273,7 +262,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     response += this.goByFields(obj, parent);
     response += '}';
     this.classArray[className] = response;
-    // this.arrayOfClasses.push(new ClassField({ name: className, arrayOfRows: this.goByFieldsRows(obj, parent) }));
     return className;
   }
   /**
@@ -361,6 +349,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
     return string;
   }
+  /**
+   * Convert ClassField array into the result code
+   * @param obj input ClassField array for convert
+   */
   getOutputTexFromArray(obj: ClassField[]) {
     let str = '';
     obj.forEach(classRow => {
@@ -382,6 +374,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     });
     return str;
   }
+  /**
+   * Copy text from code field to clipboard
+   */
   copyTextToClipboard() {
     const selBox = document.createElement('textarea');
     selBox.style.position = 'fixed';
@@ -396,32 +391,17 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     document.body.removeChild(selBox);
 
   }
-  saveToLS(inputText) {
+  /**
+   * Save @inputText to the localstorage
+   */
+  saveToLS(inputText: string) {
     window.localStorage.setItem('jsonForConvert', inputText);
   }
+  /**
+   * Read input text from the localstorage
+   */
   getFromLS() {
     return window.localStorage.getItem('jsonForConvert') || '';
   }
 
-}
-
-class Row {
-  name: string;
-  type: string;
-  constructor(obj?: Row) {
-    this.name = obj.name || '';
-    this.type = obj.type || '';
-  }
-}
-class ClassField {
-  name: string;
-  arrayOfRows: Row[];
-  constructor(obj?: ClassField) {
-    this.name = obj.name || '';
-    this.arrayOfRows = obj.arrayOfRows || [];
-  }
-}
-class TabForSelect {
-  text: string;
-  value: string;
 }
