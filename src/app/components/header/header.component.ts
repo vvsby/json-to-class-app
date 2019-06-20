@@ -229,7 +229,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   replaceSpaces(inputText: string) {
     inputText.indexOf(' ') > -1 ? this.alertMsg = true : '';
-    return inputText.indexOf(' ') > -1 ? this.replaceSpaces(inputText.replace(' ', '_')) : inputText;
+    return inputText.indexOf(' ') > -1 ? `'` + inputText + `'` : inputText;
   }
   /**
   * Parse arrays
@@ -372,7 +372,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       });
       str += '\r\n' + this.tab + 'constructor(initObject?: ' + (this.withInterfaces ? 'I' : '') + classRow.name + ') {\r\n';
       classRow.arrayOfRows.forEach(row => {
-        str += this.tab + this.tab + 'this.' + row.name + ' = initObject && initObject.' + row.name + ';\r\n';
+        if (row.name.indexOf(`'`) > -1) {
+          str += this.tab + this.tab + 'this[' + row.name + '] = initObject && initObject[' + row.name + '];\r\n';
+        } else {
+          str += this.tab + this.tab + 'this.' + row.name + ' = initObject && initObject.' + row.name + ';\r\n';
+        }
       });
       str += this.tab + '}\r\n';
       str += '}\r\n\r\n';
