@@ -228,9 +228,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   replaceSpaces(inputText: string) {
-    inputText.indexOf(' ') > -1 ? this.alertMsg = true : '' ;
-     return inputText.indexOf(' ') > -1 ? this.replaceSpaces(inputText.replace(' ', '_')) : inputText;
-   }
+    inputText.indexOf(' ') > -1 ? this.alertMsg = true : '';
+    return inputText.indexOf(' ') > -1 ? this.replaceSpaces(inputText.replace(' ', '_')) : inputText;
+  }
   /**
   * Parse arrays
   * @param obj input object for parsing
@@ -276,7 +276,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
    * Get JSON data from URL
    */
   getFromUrl() {
-    console.log(this.arrayOfClasses);
     if (this.url) {
       try {
         this.http.get(this.url).subscribe(response => {
@@ -371,7 +370,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       classRow.arrayOfRows.forEach(row => {
         str += this.tab + row.name + ': ' + row.type + ';\r\n';
       });
-      str += '\r\n' + this.tab + 'constructor(initObject: ' + (this.withInterfaces ? 'I' : '') + classRow.name + ') {\r\n';
+      str += '\r\n' + this.tab + 'constructor(initObject?: ' + (this.withInterfaces ? 'I' : '') + classRow.name + ') {\r\n';
       classRow.arrayOfRows.forEach(row => {
         str += this.tab + this.tab + 'this.' + row.name + ' = initObject && initObject.' + row.name + ';\r\n';
       });

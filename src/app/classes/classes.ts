@@ -18,4 +18,8 @@ export class ClassField {
 export class TabForSelect {
     text: string;
     value: string;
+    constructor(obj?: TabForSelect) {
+        this.text = obj.text || '';
+        this.value = obj.value || '';
+    }
 }
