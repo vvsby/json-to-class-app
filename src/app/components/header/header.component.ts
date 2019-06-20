@@ -13,6 +13,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   tab = '  ';
   withInterfaces = true;
+  alertMsg = false;
   tabArrays: TabForSelect[] = [
     { text: '2 spaces', value: '  ' },
     { text: '4 spaces', value: '    ' },
@@ -189,36 +190,31 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         if (key) {
           const type = this.getType(obj[key]);
           if (type === 'any' && parentObject) {
-            response.push({ name: key, type: this.findTypeInParent(parentObject, key) });
+            response.push({ name: key.replace(' ', '_'), type: this.findTypeInParent(parentObject, key) });
             // response += '  ' + key + ': ' + this.findTypeInParent(parentObject, key) + ';\r\n';
           } else {
             if (type !== 'object' && type !== 'array') {
-              response.push({ name: key, type: type });
+              response.push({ name: this.replaceSpaces(key), type: type });
               // response += '  ' + key + ': ' + type + ';\r\n';
             } else if (type === 'array') {
               if (this.getType(obj[key][0]) === 'object') {
                 const className = this.checkClassName(this.firstBigLetter(key) + 'Class');
-                response.push({ name: key, type: className + '[]' });
+                response.push({ name: this.replaceSpaces(key), type: className + '[]' });
                 // response += '  ' + key + ': ' + className + '[];\r\n';
                 this.createClassRow(obj[key][0], className, obj[key]);
-              } else if (this.getType(obj[key][0]) === 'array') { /* переделать */
-                console.log(key);
-                console.log(obj[key]);
+              } else if (this.getType(obj[key][0]) === 'array') {
                 const text = this.getTypeFinalRow(obj[key], key);
-                console.log(text);
-                response.push({ name: key, type: text });
-                // response += '  ' + key + ': ' + text + ';\r\n';
+                response.push({ name: this.replaceSpaces(key), type: text });
               } else {
-                response.push({ name: key, type: this.goByFields(obj[key][0], obj[key]) + '[]' });
-                // response += '  ' + key + ': ' + this.goByFields(obj[key][0], obj[key]) + '[]' + ';\r\n';
+                response.push({ name: this.replaceSpaces(key), type: this.goByFields(obj[key][0], obj[key]) + '[]' });
               }
             } else if (obj[key]) {
-              const className = this.checkClassName(this.firstBigLetter(key) + 'Class');
-              response.push({ name: key, type: className });
+              const className = this.checkClassName(this.firstBigLetter(this.replaceSpaces(key)) + 'Class');
+              response.push({ name: this.replaceSpaces(key), type: className });
               // response += '  ' + key + ': ' + className + ';\r\n';
               this.createClassRow(obj[key], className, obj);
             } else {
-              response.push({ name: key, type: 'any' });
+              response.push({ name: this.replaceSpaces(key), type: 'any' });
               // response += '  ' + key + ': any;\r\n';
             }
           }
@@ -231,7 +227,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   }
 
-
+  replaceSpaces(inputText: string) {
+    inputText.indexOf(' ') > -1 ? this.alertMsg = true : '' ;
+     return inputText.indexOf(' ') > -1 ? this.replaceSpaces(inputText.replace(' ', '_')) : inputText;
+   }
   /**
   * Parse arrays
   * @param obj input object for parsing
@@ -269,7 +268,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
    * Create new class for the class array
    */
   createClassRow(obj, name: string, parent?) {
-    const className = this.firstBigLetter(name);
+    const className = this.firstBigLetter(this.replaceSpaces(name));
     this.arrayOfClasses.push(new ClassField({ name: className, arrayOfRows: this.goByFieldsRows(obj, parent) }));
     return className;
   }
@@ -307,6 +306,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.classNamesArray = [];
     this.otputText = [];
     this.arrayOfClasses = [];
+    this.alertMsg = false;
   }
   /**
    * Return type from other element in array
@@ -356,6 +356,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
    */
   getOutputTexFromArray(obj: ClassField[]) {
     let str = '';
+    if (this.alertMsg) {
+      alert('You must to check json names. Some names with spaces.');
+    }
     obj.forEach(classRow => {
       if (this.withInterfaces) {
         str += 'export interface I' + classRow.name + '{\r\n';
