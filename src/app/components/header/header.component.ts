@@ -12,6 +12,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   @ViewChild('code') codeElement: ElementRef;
 
   tab = '  ';
+  withInterfaces = true;
   tabArrays: TabForSelect[] = [
     { text: '2 spaces', value: '  ' },
     { text: '4 spaces', value: '    ' },
@@ -356,16 +357,18 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   getOutputTexFromArray(obj: ClassField[]) {
     let str = '';
     obj.forEach(classRow => {
-      str += 'export interface I' + classRow.name + '{\r\n';
+      if (this.withInterfaces) {
+        str += 'export interface I' + classRow.name + '{\r\n';
+        classRow.arrayOfRows.forEach(row => {
+          str += this.tab + row.name + ': ' + row.type + ';\r\n';
+        });
+        str += '}\r\n\r\n';
+      }
+      str += 'export class ' + classRow.name + (this.withInterfaces ? (' implements I' + classRow.name) : '') + '{\r\n';
       classRow.arrayOfRows.forEach(row => {
         str += this.tab + row.name + ': ' + row.type + ';\r\n';
       });
-      str += '}\r\n\r\n';
-      str += 'export class ' + classRow.name + ' implements I' + classRow.name + '{\r\n';
-      classRow.arrayOfRows.forEach(row => {
-        str += this.tab + row.name + ': ' + row.type + ';\r\n';
-      });
-      str += '\r\n' + this.tab + 'constructor(initObject: I' + classRow.name + ') {\r\n';
+      str += '\r\n' + this.tab + 'constructor(initObject: ' + (this.withInterfaces ? 'I' : '') + classRow.name + ') {\r\n';
       classRow.arrayOfRows.forEach(row => {
         str += this.tab + this.tab + 'this.' + row.name + ' = initObject && initObject.' + row.name + ';\r\n';
       });

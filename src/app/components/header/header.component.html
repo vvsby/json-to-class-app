@@ -21,6 +21,8 @@
           {{ tab.text }}</mat-option>
       </mat-select>
     </mat-form-field>
+    <mat-checkbox class="paddingLeft20" [(ngModel)]="withInterfaces" (change)="updateText()">Use interfaces?
+    </mat-checkbox>
   </div>
 </div>
 <div class="bottomBox">
