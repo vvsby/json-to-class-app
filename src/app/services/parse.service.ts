@@ -15,11 +15,9 @@ export class ParseService {
   alertMsg = false;
   firstClassName = 'FirstClass';
   templateForDuplicates = 'MustBeRenaimed';
-  // inputText: string;
   otputText: any[];
   classArray: any[] = [];
   classNamesArray: string[] = [];
-  // showResult = '';
   response: HighlightResult;
   arrayOfClasses: ClassField[];
   constructor(
@@ -183,13 +181,34 @@ export class ParseService {
             if (type !== 'object' && type !== 'array') {
               response.push({ name: this.useQuotesForBadNames(key), type: type });
             } else if (type === 'array') {
-              if (this.getType(obj[key][0]) === 'object') {
+              const childType = this.getType(obj[key][0]);
+              if (childType === 'object') {
                 const className = this.checkClassName(this.firstBigLetter(key) + 'Class');
                 response.push({ name: this.useQuotesForBadNames(key), type: className + '[]' });
                 this.createClassRow(obj[key][0], className, obj[key]);
-              } else if (this.getType(obj[key][0]) === 'array') {
+              } else if (childType === 'array') {
                 const text = this.getTypeFinalRow(obj[key], key);
                 response.push({ name: this.useQuotesForBadNames(key), type: text });
+              } else if (childType === 'any') {
+                let tempType = '';
+                for (let index = 0; index < obj[key].length; index++) {
+                  if (obj[key][index] && (typeof obj[key][index] !== 'object') && !Array.isArray(obj[key][index])) {
+                    const typeTemp = this.goByFields(obj[key][index], obj[key]);
+                    if (typeTemp !== 'any') {
+                      tempType = tempType === '' ? tempType : tempType + '[] || ';
+                      tempType = tempType.indexOf(typeTemp) > -1 ? tempType : tempType + typeTemp;
+                    }
+                  } else if (Array.isArray(obj[key][index])) {
+                    tempType = this.getTypeFinal(obj[key][index], index);
+                    break;
+                  } else if (obj[key][index]) {
+                    tempType = this.checkClassName(this.firstBigLetter(this.removeBadSymbols(key)) + 'Class');
+                    this.createClassRow(obj[key][index], tempType, obj[key]);
+                    break;
+                  }
+                }
+                tempType = tempType === '' ? 'any' : tempType;
+                response.push({ name: this.useQuotesForBadNames(key), type: tempType + '[]' });
               } else {
                 response.push({ name: this.useQuotesForBadNames(key), type: this.goByFields(obj[key][0], obj[key]) + '[]' });
               }
