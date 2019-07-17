@@ -13,15 +13,15 @@ describe('AppComponent', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   }));
-  it(`should have as title 'news-demo-app'`, async(() => {
+  it(`should have as title 'json-to-class'`, async(() => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('news-demo-app');
+    expect(app.title).toEqual('json-to-class');
   }));
   it('should render title in a h1 tag', async(() => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to news-demo-app!');
+    expect(compiled.querySelector('h1').textContent).toContain('Welcome to json-to-class!');
   }));
 });

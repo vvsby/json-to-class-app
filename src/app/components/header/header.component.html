@@ -7,22 +7,22 @@
     <button (click)="getFromUrl()" class="marginLeft20">Get from url
     </button>
     <br>
-    <mat-form-field style="min-width: 250px;">
-      <input matInput type="text" [(ngModel)]="firstClassName">
-      <mat-hint align="start"><strong>First Class Name</strong> </mat-hint>
-    </mat-form-field>
-    <mat-form-field style="min-width: 250px;" class="paddingLeft20">
-      <input matInput type="text" [(ngModel)]="templateForDuplicates">
-      <mat-hint align="start"><strong>Duplicate Names Template</strong> </mat-hint>
-    </mat-form-field>
-    <mat-form-field style="min-width: 250px;" class="paddingLeft20">
-      <mat-select placeholder="Tab:" [(ngModel)]="tab" (selectionChange)="updateText()">
-        <mat-option *ngFor="let tab of tabArrays" [value]="tab.value">
-          {{ tab.text }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-checkbox class="paddingLeft20" [(ngModel)]="withInterfaces" (change)="updateText()">Use interfaces?
-    </mat-checkbox>
+      <mat-form-field style="min-width: 250px;">
+        <input matInput type="text" [(ngModel)]="firstClassName" (change)="refreshParameters()">
+        <mat-hint align="start"><strong>First Class Name</strong> </mat-hint>
+      </mat-form-field>
+      <mat-form-field style="min-width: 250px;" class="paddingLeft20">
+        <input matInput type="text" [(ngModel)]="templateForDuplicates" (change)="refreshParameters()">
+        <mat-hint align="start"><strong>Duplicate Names Template</strong> </mat-hint>
+      </mat-form-field>
+      <mat-form-field style="min-width: 250px;" class="paddingLeft20">
+        <mat-select placeholder="Tab:" [(ngModel)]="tab" (selectionChange)="updateText()">
+          <mat-option *ngFor="let tab of tabArrays" [value]="tab.value">
+            {{ tab.text }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-checkbox class="paddingLeft20" [(ngModel)]="withInterfaces" (change)="updateText()">Use interfaces?
+      </mat-checkbox>
   </div>
 </div>
 <div class="bottomBox">

@@ -43,6 +43,9 @@ import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 
 import typescript from 'highlight.js/lib/languages/typescript';
 import javascript from 'highlight.js/lib/languages/javascript';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { ParseService } from './services/parse.service';
 // import xml from 'highlight.js/lib/languages/xml';
 
 export function hljsLanguages() {
@@ -96,9 +99,11 @@ export function hljsLanguages() {
     ReactiveFormsModule,
     HighlightModule.forRoot({
       languages: hljsLanguages
-    })
+    }),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
+    ParseService
   ],
   bootstrap: [AppComponent],
   entryComponents: []

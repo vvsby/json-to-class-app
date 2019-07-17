@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "news-demo-app": {
+    "json-to-class": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -13,14 +13,15 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/news-demo-app",
+            "outputPath": "dist/json-to-class",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "src/styles.css"
@@ -43,25 +44,27 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json"
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "news-demo-app:build"
+            "browserTarget": "json-to-class:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "news-demo-app:build:production"
+              "browserTarget": "json-to-class:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "news-demo-app:build"
+            "browserTarget": "json-to-class:build"
           }
         },
         "test": {
@@ -77,7 +80,8 @@
             "scripts": [],
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/manifest.webmanifest"
             ]
           }
         },
@@ -95,7 +99,7 @@
         }
       }
     },
-    "news-demo-app-e2e": {
+    "json-to-class-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -103,11 +107,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "news-demo-app:serve"
+            "devServerTarget": "json-to-class:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "news-demo-app:serve:production"
+              "devServerTarget": "json-to-class:serve:production"
             }
           }
         },
@@ -123,5 +127,5 @@
       }
     }
   },
-  "defaultProject": "news-demo-app"
+  "defaultProject": "json-to-class"
 }
