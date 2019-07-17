@@ -11,18 +11,18 @@ import { ParseService } from '../../services/parse.service';
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
   @ViewChild('code', { static: true }) codeElement: ElementRef;
-
-  tab = '  ';
-  withInterfaces = true;
-  tabArrays: TabForSelect[] = [
-    { text: '2 spaces', value: '  ' },
-    { text: '4 spaces', value: '    ' },
-    { text: 'tab', value: ' ' },
-    { text: 'none', value: '' }
-  ];
-  firstClassName = 'FirstClass';
-  templateForDuplicates = 'MustBeRenaimed';
-  url: string;
+  /*
+    tab = '  ';
+    withInterfaces = true;
+    tabArrays: TabForSelect[] = [
+      { text: '2 spaces', value: '  ' },
+      { text: '4 spaces', value: '    ' },
+      { text: 'tab', value: ' ' },
+      { text: 'none', value: '' }
+    ];
+    firstClassName = 'FirstClass';
+    templateForDuplicates = 'MustBeRenaimed';
+    url: string;*/
   inputText: string;
   showResult = '';
 
@@ -35,39 +35,26 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.inputText = this.parseService.getFromLS();
   }
   ngAfterViewInit() { }
-  /**
-   * Copy text from code field to clipboard
-   */
-  copyTextToClipboard() {
-    const selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = this.showResult;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
-    document.execCommand('copy');
-    document.body.removeChild(selBox);
 
+  copyTextToClipboard() {
+    this.parseService.copyTextToClipboard(this.showResult);
   }
   getText() {
     this.showResult = this.parseService.getText(this.inputText);
   }
-  getFromUrl() {
-    const result = this.parseService.getFromUrl(this.url);
+  getFromUrl(url: string) {
+    const result = this.parseService.getFromUrl(url);
     this.inputText = result ? result : this.inputText;
     this.showResult = this.parseService.getText(this.inputText);
   }
   updateText() {
-    this.refreshParameters();
+    // this.refreshParameters();
     this.showResult = this.parseService.updateText();
-  }
+  }/*
   refreshParameters() {
     this.parseService.templateForDuplicates = this.templateForDuplicates;
     this.parseService.firstClassName = this.firstClassName;
     this.parseService.tab = this.tab;
     this.parseService.withInterfaces = this.withInterfaces;
-  }
+  } */
 }
