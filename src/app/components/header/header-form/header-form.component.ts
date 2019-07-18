@@ -54,7 +54,7 @@ export class HeaderFormComponent implements OnInit {
   }
   validURL(url: string) {
     const pattern = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
-    return pattern.exec(url)[0] === url;
+    return pattern.exec(url) && pattern.exec(url)[0] === url;
   }
 }
 
