@@ -410,7 +410,10 @@ export class ParseService {
    * Read input text from the localstorage
    */
   getFromLS() {
-    return window.localStorage.getItem('jsonForConvert') || '';
+    if (window && window.localStorage) {
+      return window.localStorage.getItem('jsonForConvert') || '';
+    }
+    return '';
   }
   /**
    * Copy text from code field to clipboard

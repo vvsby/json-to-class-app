@@ -26,6 +26,8 @@ import { ParseService } from './services/parse.service';
 import { HeaderFormComponent } from './components/header/header-form/header-form.component';
 import { CodeBoxTextareaComponent } from './components/code-box-textarea/code-box-textarea.component';
 import { CodeBoxCodeComponent } from './components/code-box-code/code-box-code.component';
+import { RouterModule } from '@angular/router';
+import { AppRoutingModule } from './app-routing.module';
 
 export function hljsLanguages() {
   return [
@@ -42,7 +44,7 @@ export function hljsLanguages() {
     CodeBoxCodeComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     BrowserAnimationsModule,
     HttpClientModule,
     MatButtonModule,
@@ -56,10 +58,12 @@ export function hljsLanguages() {
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
+    AppRoutingModule,
     HighlightModule.forRoot({
       languages: hljsLanguages
     }),
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    RouterModule
   ],
   providers: [
     ParseService
