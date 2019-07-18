@@ -1,7 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { HighlightResult } from 'ngx-highlightjs';
 import { HttpClient } from '@angular/common/http';
-import { ClassField, Row, TabForSelect } from '../../classes/classes';
 import { ParseService } from '../../services/parse.service';
 
 @Component({
@@ -11,18 +9,6 @@ import { ParseService } from '../../services/parse.service';
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
   @ViewChild('code', { static: true }) codeElement: ElementRef;
-  /*
-    tab = '  ';
-    withInterfaces = true;
-    tabArrays: TabForSelect[] = [
-      { text: '2 spaces', value: '  ' },
-      { text: '4 spaces', value: '    ' },
-      { text: 'tab', value: ' ' },
-      { text: 'none', value: '' }
-    ];
-    firstClassName = 'FirstClass';
-    templateForDuplicates = 'MustBeRenaimed';
-    url: string;*/
   inputText: string;
   showResult = '';
 
@@ -48,13 +34,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.showResult = this.parseService.getText(this.inputText);
   }
   updateText() {
-    // this.refreshParameters();
     this.showResult = this.parseService.updateText();
-  }/*
-  refreshParameters() {
-    this.parseService.templateForDuplicates = this.templateForDuplicates;
-    this.parseService.firstClassName = this.firstClassName;
-    this.parseService.tab = this.tab;
-    this.parseService.withInterfaces = this.withInterfaces;
-  } */
+  }
 }
