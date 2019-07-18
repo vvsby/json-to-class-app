@@ -49,7 +49,6 @@ import { ParseService } from './services/parse.service';
 import { HeaderFormComponent } from './components/header/header-form/header-form.component';
 import { CodeBoxTextareaComponent } from './components/code-box-textarea/code-box-textarea.component';
 import { CodeBoxCodeComponent } from './components/code-box-code/code-box-code.component';
-// import xml from 'highlight.js/lib/languages/xml';
 
 export function hljsLanguages() {
   return [
