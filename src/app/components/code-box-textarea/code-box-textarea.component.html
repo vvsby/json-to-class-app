@@ -3,6 +3,8 @@
         <p>JSON for convert</p>
     </div>
     <div class="code">
-        <textarea [(ngModel)]="text" rows="40" cols="80" (change)="update()"></textarea>
+        <label for="textareaCode">
+            <textarea [(ngModel)]="text" rows="40" cols="80" (change)="update()" id="textareaCode" aria-label="Input text"></textarea>
+        </label>
     </div>
 </div>

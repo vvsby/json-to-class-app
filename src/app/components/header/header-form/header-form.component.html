@@ -1,27 +1,37 @@
 <div class="header">
-    <form [formGroup]="headerForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="headerForm" (ngSubmit)="onSubmit()">
+    <label for="url">URL
       <mat-form-field style="min-width: 80%;">
-        <input matInput type="text" formControlName="url">
+        <input matInput type="text" formControlName="url" id="url"
+          matTooltip="Server must return 'Access-Control-Allow-Origin: *'">
         <mat-hint align="start"><strong>Get from url</strong> </mat-hint>
       </mat-form-field>
-      <button (click)="getFromUrl()" class="marginLeft20">Get from url
-      </button>
-      <br>
-        <mat-form-field style="min-width: 250px;">
-          <input matInput type="text" formControlName="firstClassName" (change)="refreshParameters()">
-          <mat-hint align="start"><strong>First Class Name</strong> </mat-hint>
-        </mat-form-field>
-        <mat-form-field style="min-width: 250px;" class="paddingLeft20">
-          <input matInput type="text" formControlName="templateForDuplicates" (change)="refreshParameters()">
-          <mat-hint align="start"><strong>Duplicate Names Template</strong> </mat-hint>
-        </mat-form-field>
-        <mat-form-field style="min-width: 250px;" class="paddingLeft20">
-          <mat-select placeholder="Tab:" formControlName="tab" (selectionChange)="updateText()">
-            <mat-option *ngFor="let tab of tabArrays" [value]="tab.value">
-              {{ tab.text }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-checkbox class="paddingLeft20" formControlName="withInterfaces" (change)="updateText()">Use interfaces?
-        </mat-checkbox>
-    </form>
-  </div>
+    </label>
+    <button (click)="getFromUrl()" class="marginLeft20">Get from url
+    </button>
+    <br>
+    <label for="firstClassName">
+      <mat-form-field style="min-width: 250px;">
+        <input matInput type="text" formControlName="firstClassName" id="firstClassName" (change)="refreshParameters()">
+        <mat-hint align="start"><strong>First Class Name</strong> </mat-hint>
+      </mat-form-field>
+    </label>
+    <label for="templateForDuplicates">
+      <mat-form-field style="min-width: 250px;" class="paddingLeft20">
+        <input matInput type="text" formControlName="templateForDuplicates" id="templateForDuplicates"
+          (change)="refreshParameters()">
+        <mat-hint align="start"><strong>Duplicate Names Template</strong> </mat-hint>
+      </mat-form-field>
+    </label>
+    <label for="tab">
+      <mat-form-field style="min-width: 250px;" class="paddingLeft20">
+        <mat-select placeholder="Tab:" formControlName="tab" id="tab" (selectionChange)="updateText()">
+          <mat-option *ngFor="let tab of tabArrays" [value]="tab.value">
+            {{ tab.text }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </label>
+    <mat-checkbox class="paddingLeft20" formControlName="withInterfaces" (change)="updateText()">Use interfaces?
+    </mat-checkbox>
+  </form>
+</div>

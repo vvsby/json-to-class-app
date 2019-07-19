@@ -12,6 +12,7 @@ import {
   MatInputModule,
   MatSelectModule,
   MatToolbarModule,
+  MatTooltipModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -56,6 +57,7 @@ export function hljsLanguages() {
     MatInputModule,
     MatToolbarModule,
     MatSelectModule,
+    MatTooltipModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
