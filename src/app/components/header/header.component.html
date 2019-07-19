@@ -1,17 +1,24 @@
-<app-header-form (update)="updateText()" (byUrl)="getFromUrl($event)"></app-header-form>
+<header>
+  <app-header-form (update)="updateText()" (byUrl)="getFromUrl($event)"></app-header-form>
+</header>
 <div class="bottomBox">
-  <div class="table">
-    <div class="codeBox">
-      <app-code-box-textarea [(text)]="inputText"></app-code-box-textarea>
+  <main>
+    <div class="table">
+      <div class="codeBox">
+        <app-code-box-textarea [(text)]="inputText"></app-code-box-textarea>
+      </div>
+      <div class="codeBox">
+        <app-code-box-code [text]="showResult" [text]="showResult"></app-code-box-code>
+      </div>
     </div>
-    <div class="codeBox">
-      <app-code-box-code [text]="showResult" [text]="showResult"></app-code-box-code>
-    </div>
-  </div>
+  </main>
   <div style="margin-top: 10px;">
     <button (click)="getText()">Convert</button>
     <button (click)="copyTextToClipboard()" class="marginLeft20">Copy result</button>
   </div>
   <div style="margin-top: 10px;">
   </div>
+  <footer class="footer">
+    <p class="footer__text">Created by: Voylokov Viktor</p>
+  </footer>
 </div>
