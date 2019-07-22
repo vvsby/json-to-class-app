@@ -1,6 +1,6 @@
 <div class="header">
-  <form [formGroup]="headerForm" (ngSubmit)="onSubmit()">
-    <label for="url">URL
+  <form [formGroup]="headerForm" (ngSubmit)="onSubmit()" class="paddingLeft20">
+    <label for="url">
       <mat-form-field style="min-width: 80%;">
         <input matInput type="text" formControlName="url" id="url"
           matTooltip="Server must return 'Access-Control-Allow-Origin: *'">
@@ -17,21 +17,21 @@
       </mat-form-field>
     </label>
     <label for="templateForDuplicates">
-      <mat-form-field style="min-width: 250px;" class="paddingLeft20">
+      <mat-form-field style="min-width: 250px;">
         <input matInput type="text" formControlName="templateForDuplicates" id="templateForDuplicates"
           (change)="refreshParameters()">
         <mat-hint align="start"><strong>Duplicate Names Template</strong> </mat-hint>
       </mat-form-field>
     </label>
     <label for="tab">
-      <mat-form-field style="min-width: 250px;" class="paddingLeft20">
+      <mat-form-field style="min-width: 250px;">
         <mat-select placeholder="Tab:" formControlName="tab" id="tab" (selectionChange)="updateText()">
           <mat-option *ngFor="let tab of tabArrays" [value]="tab.value">
             {{ tab.text }}</mat-option>
         </mat-select>
       </mat-form-field>
     </label>
-    <mat-checkbox class="paddingLeft20" formControlName="withInterfaces" (change)="updateText()">Use interfaces?
+    <mat-checkbox formControlName="withInterfaces" (change)="updateText()">Use interfaces?
     </mat-checkbox>
   </form>
 </div>
