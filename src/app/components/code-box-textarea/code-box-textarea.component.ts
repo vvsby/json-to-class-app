@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { ParseService } from 'src/app/services/parse.service';
 
 @Component({
   selector: 'app-code-box-textarea',
@@ -7,10 +8,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class CodeBoxTextareaComponent implements OnInit {
   @Input() text: string;
-  @Input() tab: string;
   @Output() textChange = new EventEmitter<string>();
 
-  constructor() { }
+  constructor(public parseService: ParseService) { }
 
   ngOnInit() {
   }
@@ -18,7 +18,7 @@ export class CodeBoxTextareaComponent implements OnInit {
     this.textChange.next(this.text);
   }
   format() {
-    this.text = JSON.stringify(JSON.parse(this.text), (k, v) => v, this.tab);
+    this.text = JSON.stringify(JSON.parse(this.text), (k, v) => v, this.parseService.tab);
   }
   removeFormat() {
     this.text = JSON.stringify(JSON.parse(this.text));
