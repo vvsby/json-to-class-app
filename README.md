@@ -14,6 +14,7 @@ then for all new classes with duplicate names class names will be renamed: [Dupl
 <b>Use interfaces?</b> (default: true) - create interfaces and classes or only classes. 
 
 <b>JSON for convert</b> (default: previous JSON) - JSON which we want to convert.
+You can format or minimize your json (<i>Format</i> or <i>Compact json data</i>).
 
 <b>Result</b> - result text which contain full list of interfaces and/or classes and can be copied to clipboard by:
 <b>Copy result</b> button or file copy icon.

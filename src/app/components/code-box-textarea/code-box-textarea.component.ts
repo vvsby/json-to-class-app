@@ -7,6 +7,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class CodeBoxTextareaComponent implements OnInit {
   @Input() text: string;
+  @Input() tab: string;
   @Output() textChange = new EventEmitter<string>();
 
   constructor() { }
@@ -15,5 +16,11 @@ export class CodeBoxTextareaComponent implements OnInit {
   }
   update() {
     this.textChange.next(this.text);
+  }
+  format() {
+    this.text = JSON.stringify(JSON.parse(this.text), (k, v) => v, this.tab);
+  }
+  removeFormat() {
+    this.text = JSON.stringify(JSON.parse(this.text));
   }
 }
