@@ -20,3 +20,5 @@ then for all new classes with duplicate names class names will be renamed: [Dupl
 
 
 <b>Convert</b> button  - will start converting JSON from <b>JSON for convert</b> field.
+
+You can test this application on: https://json-to-class.000webhostapp.com/
