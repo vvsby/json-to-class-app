@@ -21,3 +21,5 @@ You can format or minimize your json (<i>Format</i> or <i>Compact json data</i>)
 
 
 <b>Convert</b> button  - will start converting JSON from <b>JSON for convert</b> field.
+
+You can test this application on: https://json-to-class.000webhostapp.com/
