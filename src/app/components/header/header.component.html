@@ -9,7 +9,7 @@
         <app-code-box-textarea [(text)]="inputText"></app-code-box-textarea>
       </div>
       <div class="codeBox">
-        <app-code-box-code [text]="showResult" ></app-code-box-code>
+        <app-code-box-code [text]="showResult"></app-code-box-code>
       </div>
     </div>
   </main>
@@ -17,7 +17,8 @@
     <button (click)="getText()">Convert</button>
     <button (click)="copyTextToClipboard()" class="marginLeft20">Copy result</button>
   </div>
-  <app-file-upload  [enableMultiple]="false" (fileList)="addFiles($event)" [show]="false"></app-file-upload>
+  <h4 class="inform" *ngIf="responseView">The structure of your file is represented by the type: <span class="red">{{responseView}}</span></h4>
+  <app-file-upload [enableMultiple]="false" (fileList)="addFiles($event)" [show]="false"></app-file-upload>
   <footer class="footer">
     <p class="footer__text">Created by: Voylokov Viktor</p>
   </footer>

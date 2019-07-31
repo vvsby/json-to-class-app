@@ -12,6 +12,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   @ViewChild('code', { static: true }) codeElement: ElementRef;
   inputText: string;
   showResult = '';
+  responseView = '';
+
 
   constructor(
     public http: HttpClient,
@@ -43,10 +45,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
   getText() {
     this.showResult = this.parseService.getText(this.inputText);
-    const responseText = 'The structure of your file is represented by the type: ' + this.parseService.responseText;
-    this._snackBar.open(responseText, '', {
+    this.responseView = this.parseService.responseText;
+    /* this._snackBar.open(this.responseView, '', {
       duration: 10000
-    });
+    }); */
   }
   getFromUrl(url: string) {
     const result = this.parseService.getFromUrl(url);
