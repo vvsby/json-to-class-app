@@ -14,13 +14,13 @@ export class CodeBoxTextareaComponent implements OnInit {
 
   ngOnInit() {
   }
-  update() {
-    this.textChange.next(this.text);
-  }
   format() {
     this.text = JSON.stringify(JSON.parse(this.text), (k, v) => v, this.parseService.tab);
   }
   removeFormat() {
     this.text = JSON.stringify(JSON.parse(this.text));
+  }
+  update() {
+    this.textChange.next(this.text);
   }
 }

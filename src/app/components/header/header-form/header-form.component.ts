@@ -9,7 +9,6 @@ import { ParseService } from 'src/app/services/parse.service';
   styleUrls: ['./header-form.component.css']
 })
 export class HeaderFormComponent implements OnInit {
-  @Output() update = new EventEmitter<IHeaderForm>();
   @Output() byUrl = new EventEmitter<string>();
   headerForm = new FormGroup({
     url: new FormControl(''),
@@ -25,6 +24,7 @@ export class HeaderFormComponent implements OnInit {
     { text: 'tab', value: ' ' },
     { text: 'none', value: '' }
   ];
+  @Output() update = new EventEmitter<IHeaderForm>();
 
   constructor(
     public parseService: ParseService

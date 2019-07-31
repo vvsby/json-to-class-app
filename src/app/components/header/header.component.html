@@ -3,6 +3,7 @@
 </header>
 <div class="bottomBox">
   <main>
+    <h4 class="inform">You can upload your json file as txt or json. Just drop it!</h4>
     <div class="table">
       <div class="codeBox">
         <app-code-box-textarea [(text)]="inputText"></app-code-box-textarea>
@@ -16,6 +17,7 @@
     <button (click)="getText()">Convert</button>
     <button (click)="copyTextToClipboard()" class="marginLeft20">Copy result</button>
   </div>
+  <app-file-upload  [enableMultiple]="false" (fileList)="addFiles($event)" [show]="false"></app-file-upload>
   <footer class="footer">
     <p class="footer__text">Created by: Voylokov Viktor</p>
   </footer>

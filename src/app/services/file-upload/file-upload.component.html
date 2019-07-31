@@ -1,0 +1,20 @@
+<input #fileInput multiple name="file" type="file" [hidden]="true" (change)="getFile($event)">
+<input #fileInputFolder multiple directory mozdirectory webkitdirectory name="folder" type="file" [hidden]="true"
+  (change)="getFile($event)">
+<div *ngIf="show"><button *ngIf="enableMultiple" ibmButton (click)="chooseFolder()" class="button">Choose Multiple
+    Files</button>
+  <button ibmButton (click)="chooseFile()" class="button">Browse</button>
+  <div class="min__drop_zone" on-dragenter="$event.stopPropagation(); $event.preventDefault(); "
+    on-dragover="$event.stopPropagation(); $event.preventDefault();"
+    on-drop="$event.stopPropagation(); $event.preventDefault(); getFile($event); ">Drop files here...
+  </div>
+</div>
+<div *ngIf="fileService.enableFullscreenDropZone && fileService.drop"
+  on-dragenter="$event.stopPropagation(); $event.preventDefault();  fileService.drop = true;"
+  on-dragover="$event.stopPropagation(); $event.preventDefault()"
+  on-drop="$event.stopPropagation(); $event.preventDefault(); fileService.getFileList($event); fileService.drop = false;"
+  on-dragleave="$event.stopPropagation(); $event.preventDefault(); fileService.drop = false;"
+  class="fullscreen__drop_zone">
+  <p class="text__drop_zone">
+    Drop file here</p>
+</div>

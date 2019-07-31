@@ -14,6 +14,7 @@ export class ParseService {
   withInterfaces = true;
   alertMsg = false;
   firstClassName = 'FirstClass';
+  responseText = '';
   templateForDuplicates = 'MustBeRenaimed';
   otputText: any[];
   classArray: any[] = [];
@@ -39,6 +40,7 @@ export class ParseService {
     }
     if (parsed) {
       this.initArrays();
+      this.responseText = this.checkClassName(this.firstClassName) + this.getLevelInArray(parsed);
       this.createClassRow(this.getObjectFromArray(parsed), this.checkClassName(this.firstClassName));
       const showResult = this.getOutputTexFromArray(this.arrayOfClasses); // str;
       return showResult;
@@ -53,6 +55,9 @@ export class ParseService {
   }
   getObjectFromArray(obj) {
     return Array.isArray(obj) ? this.getObjectFromArray(obj.shift()) : obj;
+  }
+  getLevelInArray(obj) {
+    return Array.isArray(obj) ? this.getLevelInArray(obj.shift()) + '[]' : '';
   }
   /**
    * Return input string with first big letter

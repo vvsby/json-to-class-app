@@ -12,22 +12,24 @@ import {
   MatInputModule,
   MatSelectModule,
   MatToolbarModule,
+  MatSnackBarModule,
   MatTooltipModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { RouterModule } from '@angular/router';
+
+import { HighlightModule } from 'ngx-highlightjs';
+import typescript from 'highlight.js/lib/languages/typescript';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
-import { HighlightModule } from 'ngx-highlightjs';
-
-import typescript from 'highlight.js/lib/languages/typescript';
-import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { ParseService } from './services/parse.service';
+import { FileUploadComponent } from './services/file-upload/file-upload.component';
 import { HeaderFormComponent } from './components/header/header-form/header-form.component';
 import { CodeBoxTextareaComponent } from './components/code-box-textarea/code-box-textarea.component';
 import { CodeBoxCodeComponent } from './components/code-box-code/code-box-code.component';
-import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 
 export function hljsLanguages() {
@@ -43,6 +45,7 @@ export function hljsLanguages() {
     HeaderFormComponent,
     CodeBoxTextareaComponent,
     CodeBoxCodeComponent,
+    FileUploadComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -58,6 +61,7 @@ export function hljsLanguages() {
     MatToolbarModule,
     MatSelectModule,
     MatTooltipModule,
+    MatSnackBarModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
