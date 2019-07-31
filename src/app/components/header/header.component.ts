@@ -45,7 +45,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.showResult = this.parseService.getText(this.inputText);
     const responseText = 'The structure of your file is represented by the type: ' + this.parseService.responseText;
     this._snackBar.open(responseText, '', {
-      duration: 3000
+      duration: 10000
     });
   }
   getFromUrl(url: string) {
