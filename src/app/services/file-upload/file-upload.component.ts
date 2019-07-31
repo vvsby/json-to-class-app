@@ -15,7 +15,7 @@ export class FileUploadComponent implements OnInit, OnDestroy {
   @ViewChild('fileInputFolder', { static: true }) fileInputFolder: ElementRef;
   @Output() fileList: EventEmitter<FileList> = new EventEmitter<FileList>();
 
-  constructor(private fileService: FileService,
+  constructor(public fileService: FileService,
   ) {
   }
   addListener(event) {
