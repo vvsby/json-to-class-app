@@ -46,9 +46,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   getText() {
     this.showResult = this.parseService.getText(this.inputText);
     this.responseView = this.parseService.responseText;
-    /* this._snackBar.open(this.responseView, '', {
-      duration: 10000
-    }); */
   }
   getFromUrl(url: string) {
     const result = this.parseService.getFromUrl(url);
