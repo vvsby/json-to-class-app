@@ -8,19 +8,20 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ParseService {
 
-  tab = '  ';
-  badSymbolsAlertMsg = 'You need to check JSON names. Some names with bad characters.';
-  regexp = new RegExp('\\W+');
-  withInterfaces = true;
   alertMsg = false;
-  firstClassName = 'FirstClass';
-  responseText = '';
-  templateForDuplicates = 'MustBeRenaimed';
-  otputText: any[];
+  arrayOfClasses: ClassField[];
+  badSymbolsAlertMsg = 'You need to check JSON names. Some names with bad characters.';
   classArray: any[] = [];
   classNamesArray: string[] = [];
+  firstClassName = 'FirstClass';
+  otputText: any[];
+  regexp = new RegExp('\\W+');
   response: HighlightResult;
-  arrayOfClasses: ClassField[];
+  responseText = '';
+  tab = '  ';
+  templateForDuplicates = 'MustBeRenaimed';
+  types = ['boolean', 'number', 'any', 'string', 'symbol'];
+  withInterfaces = true;
   constructor(
     public http: HttpClient) {
     this.initArrays();
@@ -394,11 +395,23 @@ export class ParseService {
       });
       str += '\r\n' + this.tab + 'constructor(initObject?: ' + (this.withInterfaces ? 'I' : '') + classRow.name + ') {\r\n';
       classRow.arrayOfRows.forEach(row => {
-        if (row.name.indexOf(`'`) > -1) {
-          str += this.tab + this.tab + 'this[' + row.name + '] = initObject && initObject[' + row.name + '];\r\n';
-        } else {
+        let openHook = '[';
+        let closeHook = ']';
+        let openClassName = 'new ' + row.type + '(';
+        let closeClassName = ')';
+        if (row.name.indexOf(`'`) === -1) {
+          openHook = '.';
+          closeHook = '';
+          // str += this.tab + this.tab + 'this[' + row.name + '] = initObject && initObject[' + row.name + '];\r\n';
+        } /* else {
           str += this.tab + this.tab + 'this.' + row.name + ' = initObject && initObject.' + row.name + ';\r\n';
+        } */
+        if (this.types.indexOf(row.type) > -1 || row.type.indexOf('[') > -1) {
+          openClassName = '';
+          closeClassName = row.type.indexOf('[') > -1 ? ' || []' : '';
         }
+        str += this.tab + this.tab + 'this' + openHook + row.name + closeHook + ' = '
+          + openClassName + 'initObject && initObject' + openHook + row.name + closeHook + closeClassName + ';\r\n';
       });
       str += this.tab + '}\r\n';
       str += '}\r\n\r\n';
