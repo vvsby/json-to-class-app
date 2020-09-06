@@ -11,8 +11,12 @@
       "schematics": {},
       "architect": {
         "build": {
+          "allowedCommonJsDependencies": [
+            "highlight.js"
+          ],
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/json-to-class",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -24,12 +28,19 @@
               "src/manifest.webmanifest"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "./node_modules/highlight.js/styles/vs.css"
             ],
             "scripts": []
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -113,10 +124,7 @@
                 }
               ],
               "sourceMap": false,
-              "optimization": {
-                "scripts": false,
-                "styles": true
-              }
+              "optimization": true
             }
           }
         },
