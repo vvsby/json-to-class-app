@@ -14,6 +14,7 @@ export class HeaderFormComponent implements OnInit {
     url: new FormControl(''),
     firstClassName: new FormControl('FirstClass'),
     templateForDuplicates: new FormControl('MustBeRenaimed'),
+    withClasses: new FormControl(true),
     tab: new FormControl('  '),
     withInterfaces: new FormControl(true)
   });
@@ -44,6 +45,7 @@ export class HeaderFormComponent implements OnInit {
     this.parseService.firstClassName = this.headerForm.value.firstClassName;
     this.parseService.tab = this.headerForm.value.tab;
     this.parseService.withInterfaces = this.headerForm.value.withInterfaces;
+    this.parseService.withClasses = this.headerForm.value.withClasses;
   }
   getFromUrl() {
     if (this.validURL(this.headerForm.value.url)) {
@@ -64,4 +66,5 @@ class IHeaderForm {
   templateForDuplicates: string;
   tab: string;
   withInterfaces: boolean;
+  withClasses: boolean;
 }
