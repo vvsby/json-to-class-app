@@ -22,11 +22,14 @@ export class ParseService {
   templateForDuplicates = 'MustBeRenaimed';
   types = ['boolean', 'number', 'any', 'string', 'symbol'];
   withInterfaces = true;
+  withClasses = true;
+
   constructor(
     public http: HttpClient) {
     this.initArrays();
 
   }
+
   /**
    * Parse and convert input text into the final result
    * @param inputText text for parsing
@@ -48,18 +51,22 @@ export class ParseService {
     }
     return '';
   }
+
   /**
    * Return updated text after changing parameters.
    */
   updateText() {
     return this.getOutputTexFromArray(this.arrayOfClasses);
   }
+
   getObjectFromArray(obj) {
     return Array.isArray(obj) ? this.getObjectFromArray(obj.shift()) : obj;
   }
+
   getLevelInArray(obj) {
     return Array.isArray(obj) ? this.getLevelInArray(obj.shift()) + '[]' : '';
   }
+
   /**
    * Return input string with first big letter
    * @param str input string
@@ -68,6 +75,7 @@ export class ParseService {
     const response = str[0].toUpperCase() + str.substring(1, str.length);
     return response;
   }
+
   /**
    * Return string type of the object
    * @param obj input object
@@ -83,6 +91,7 @@ export class ParseService {
     }
     return 'object';
   }
+
   /**
    * Main function for parsing
    * @param obj input object for parsing
@@ -95,6 +104,7 @@ export class ParseService {
       return this.goByFieldsForArray(obj);
     }
   }
+
   /**
   * Parse arrays
   * @param obj input object for parsing
@@ -115,6 +125,7 @@ export class ParseService {
       return typeForResponse + '[]';
     }
   }
+
   /**
    * Parse objects
    * @param obj input object for parsing
@@ -158,6 +169,7 @@ export class ParseService {
     }
 
   }
+
   /**
    * Main function for parsing
    * @param obj input object for parsing
@@ -170,6 +182,7 @@ export class ParseService {
       return [];
     }
   }
+
   /**
    * Parse objects
    * @param obj input object for parsing
@@ -203,6 +216,7 @@ export class ParseService {
       return [];
     }
   }
+
   getTypeOfArray(obj, key) {
     let response: { name: string, type: string };
     const childType = this.getType(obj[key][0]);
@@ -238,18 +252,22 @@ export class ParseService {
     }
     return response;
   }
+
   useQuotesForBadNames(inputText: string) {
     if (this.findBadSymbols(inputText)) { this.alertMsg = true; }
     return this.findBadSymbols(inputText) ? `'` + inputText + `'` : inputText;
   }
+
   findBadSymbols(inputText: string) {
     const responseArray = inputText.match(this.regexp);
     return responseArray ? true : false;
   }
+
   removeBadSymbols(inputText: string) {
     const response = inputText.replace(this.regexp, '');
     return response;
   }
+
   /**
   * Parse arrays
   * @param obj input object for parsing
@@ -270,6 +288,7 @@ export class ParseService {
       return typeForResponse + '[]';
     }
   }
+
   /**
    * Create new class for the class array
    */
@@ -277,12 +296,13 @@ export class ParseService {
     const className = this.firstBigLetter(name);
     this.classNamesArray.push(className);
     let response = '';
-    response = 'class ' + className + ' {\r\n';
+    response = 'class ' + className + '  {\r\n';
     response += this.goByFields(obj, parent);
     response += '}';
     this.classArray[className] = response;
     return className;
   }
+
   /**
    * Create new class for the class array
    */
@@ -292,6 +312,7 @@ export class ParseService {
     this.arrayOfClasses.push(new ClassField({ name: className, arrayOfRows: this.goByFieldsRows(obj, parent) }));
     return className;
   }
+
   /**
    * Get JSON data from URL
    */
@@ -312,6 +333,7 @@ export class ParseService {
       return null;
     }
   }
+
   /**
    * Return classname with 'MustBeRenamed*' mask if class name was defined
    * @param name class name
@@ -319,6 +341,7 @@ export class ParseService {
   checkClassName(name: string) {
     return this.classNamesArray.indexOf(name) < 0 ? name : this.checkClassName(this.templateForDuplicates + name);
   }
+
   /**
    * Initialize all arrays
    */
@@ -348,6 +371,7 @@ export class ParseService {
     }
     return type;
   }
+
   getTypeFinal(obj, name) {
     if (Array.isArray(obj)) {
       return this.getTypeFinal(obj[0], name) + '[]';
@@ -360,6 +384,7 @@ export class ParseService {
     }
     return string;
   }
+
   getTypeFinalRow(obj, name) {
     if (Array.isArray(obj)) {
       return this.getTypeFinalRow(obj[0], name) + '[]';
@@ -372,6 +397,7 @@ export class ParseService {
     }
     return string;
   }
+
   /**
    * Convert ClassField array into the result code
    * @param obj input ClassField array for convert
@@ -383,47 +409,51 @@ export class ParseService {
     }
     obj.forEach(classRow => {
       if (this.withInterfaces) {
-        str += 'export interface I' + classRow.name + '{\r\n';
+        str += 'export interface I' + classRow.name + ' {\r\n';
         classRow.arrayOfRows.forEach(row => {
           str += this.tab + row.name + ': ' + row.type + ';\r\n';
         });
         str += '}\r\n\r\n';
       }
-      str += 'export class ' + classRow.name + (this.withInterfaces ? (' implements I' + classRow.name) : '') + '{\r\n';
-      classRow.arrayOfRows.forEach(row => {
-        str += this.tab + row.name + ': ' + row.type + ';\r\n';
-      });
-      str += '\r\n' + this.tab + 'constructor(initObject?: ' + (this.withInterfaces ? 'I' : '') + classRow.name + ') {\r\n';
-      classRow.arrayOfRows.forEach(row => {
-        let openHook = '[';
-        let closeHook = ']';
-        let openClassName = 'new ' + row.type + '(';
-        let closeClassName = ')';
-        if (row.name.indexOf(`'`) === -1) {
-          openHook = '.';
-          closeHook = '';
-          // str += this.tab + this.tab + 'this[' + row.name + '] = initObject && initObject[' + row.name + '];\r\n';
-        } /* else {
+      if (this.withClasses) {
+        str += 'export class ' + classRow.name + (this.withInterfaces ? (' implements I' + classRow.name) : '') + ' {\r\n';
+        classRow.arrayOfRows.forEach(row => {
+          str += this.tab + row.name + ': ' + row.type + ';\r\n';
+        });
+        str += '\r\n' + this.tab + 'constructor(initObject?: ' + (this.withInterfaces ? 'I' : '') + classRow.name + ') {\r\n';
+        classRow.arrayOfRows.forEach(row => {
+          let openHook = '[';
+          let closeHook = ']';
+          let openClassName = 'new ' + row.type + '(';
+          let closeClassName = ')';
+          if (row.name.indexOf(`'`) === -1) {
+            openHook = '.';
+            closeHook = '';
+            // str += this.tab + this.tab + 'this[' + row.name + '] = initObject && initObject[' + row.name + '];\r\n';
+          } /* else {
           str += this.tab + this.tab + 'this.' + row.name + ' = initObject && initObject.' + row.name + ';\r\n';
         } */
-        if (this.types.indexOf(row.type) > -1 || row.type.indexOf('[') > -1) {
-          openClassName = '';
-          closeClassName = row.type.indexOf('[') > -1 ? ' || []' : '';
-        }
-        str += this.tab + this.tab + 'this' + openHook + row.name + closeHook + ' = '
-          + openClassName + 'initObject && initObject' + openHook + row.name + closeHook + closeClassName + ';\r\n';
-      });
-      str += this.tab + '}\r\n';
-      str += '}\r\n\r\n';
+          if (this.types.indexOf(row.type) > -1 || row.type.indexOf('[') > -1) {
+            openClassName = '';
+            closeClassName = row.type.indexOf('[') > -1 ? ' || []' : '';
+          }
+          str += this.tab + this.tab + 'this' + openHook + row.name + closeHook + ' = '
+            + openClassName + 'initObject?' + openHook + row.name + closeHook + closeClassName + ';\r\n';
+        });
+        str += this.tab + '}\r\n';
+        str += '}\r\n\r\n';
+      }
     });
     return str;
   }
+
   /**
    * Save @inputText to the localstorage
    */
   saveToLS(inputText: string) {
     window.localStorage.setItem('jsonForConvert', inputText);
   }
+
   /**
    * Read input text from the localstorage
    */
@@ -433,6 +463,7 @@ export class ParseService {
     }
     return '';
   }
+
   /**
    * Copy text from code field to clipboard
    */
